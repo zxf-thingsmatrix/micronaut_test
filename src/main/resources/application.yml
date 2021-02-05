@@ -24,6 +24,9 @@ micronaut:
         mapping: /swagger-ui/**
   metrics:
     enabled: true
+  validator:
+    enabled: true
+
 
 #management
 endpoints:
@@ -31,6 +34,7 @@ endpoints:
     enabled: true
     sensitive: false
     path: /eps
+
 
 jackson:
   bean-introspection-module: true

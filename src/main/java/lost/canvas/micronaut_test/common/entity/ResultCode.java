@@ -7,7 +7,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ResultCode {
 
-    OK(2000),
-    FAIL(4000);
+    ok(0, "ok"),
+    fail(4000, "fail"),
+    validate_fail(4444, "validate fail: {0}");
     private final Integer code;
+    private final String defaultMessage;
+
+    public String getMessageKey() {
+        return "result.code." + code;
+    }
 }

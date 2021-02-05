@@ -1,5 +1,6 @@
 package lost.canvas.micronaut_test.controller;
 
+import io.micronaut.context.MessageSource;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -16,6 +18,10 @@ import javax.validation.constraints.NotBlank;
 @Validated
 @Controller
 public class PingController {
+
+    @Inject
+    private MessageSource messageSource;
+
 
     @Get(value = "/ping/plain")
     @Produces(value = MediaType.TEXT_PLAIN)
@@ -35,7 +41,7 @@ public class PingController {
     public Pong pingJson2(HttpRequest req,
                           @Valid @Body Ping ping) {
         int v = 1 / 0;
-        log.info("[{}] ping greet: {}", req.getRemoteAddress().getHostString(), ping.getGreet());
+//        log.info("[{}] ping greet: {}", req.getRemoteAddress().getHostString(), ping.getGreet());
         return new Pong(req.getRemoteAddress().getHostString(), ping.getGreet());
     }
 
