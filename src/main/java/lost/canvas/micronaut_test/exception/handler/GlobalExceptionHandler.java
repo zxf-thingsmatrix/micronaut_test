@@ -1,47 +1,59 @@
 package lost.canvas.micronaut_test.exception.handler;
 
-import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import lost.canvas.micronaut_test.common.entity.Result;
 import lost.canvas.micronaut_test.common.entity.ResultCode;
+import lost.canvas.micronaut_test.common.exception.ServiceException;
+import lost.canvas.micronaut_test.common.util.Utils;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.stream.Collectors;
 
+/**
+ * 泛型必须是 {@link HttpResponse} 类型，否则默认会 wrap 一个 http.status=500 的 {@link HttpResponse}
+ * <p>
+ * RoutingInBoundHandler#errorResultToResponse(java.lang.Object)
+ */
 @Slf4j
 //替换 ConstraintExceptionHandler，使得 可以拦截ConstraintException
 @Replaces(io.micronaut.validation.exceptions.ConstraintExceptionHandler.class)
 @Produces(value = MediaType.APPLICATION_JSON)
 @Singleton
-public class GlobalExceptionHandler implements ExceptionHandler<Throwable, Result<Void>> {
-
-    @Inject
-    private MessageSource messageSource;
+public class GlobalExceptionHandler implements ExceptionHandler<Throwable, HttpResponse<Result<Void>>> {
 
     @Override
-    public Result<Void> handle(HttpRequest request, Throwable exception) {
+    public HttpResponse<Result<Void>> handle(HttpRequest request, Throwable exception) {
 
-        Locale locale = (Locale) request.getLocale().orElse(Locale.getDefault());
+        log.error("========================handle-global-exception========================", exception);
 
-        log.error("========================global-exception========================", exception);
-
+        //拦截 validation 相关异常
         if (exception instanceof ConstraintViolationException) {
             ConstraintViolationException ex = (ConstraintViolationException) exception;
-            String message = ex.getConstraintViolations().iterator().next().getMessage();
-            Map<String, Object> map = new HashMap<>();
-            map.put("0", message);
-            String localMessage = messageSource.getMessage(ResultCode.validate_fail.getMessageKey(), MessageSource.MessageContext.of(locale, map), ResultCode.validate_fail.getDefaultMessage());
-            return new Result(ResultCode.validate_fail.getCode(), localMessage, null);
+            Object[] messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate)
+                    .filter(Utils.empty::nonEmpty)
+                    .map(message -> message.replace("{", ""))
+                    .map(message -> message.replace("}", ""))
+                    .collect(Collectors.toList()).toArray(new String[]{});
+            Result<Void> result = Result.fail(ResultCode.validate_fail, Utils.message.convertVariables(messages));
+            return HttpResponse.ok(result);
         }
-        return Result.fail(ResultCode.fail);
+
+        //拦截 ServiceException
+        if (exception instanceof ServiceException) {
+            ServiceException ex = (ServiceException) exception;
+            Result<Void> result = Result.fail(ex.getResultCode(), ex.getVariables());
+            return HttpResponse.ok(result);
+        }
+
+        Result<Void> result = Result.fail(ResultCode.unknown_exception);
+        return HttpResponse.ok(result);
     }
 }

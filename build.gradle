@@ -8,10 +8,6 @@ plugins {
 version = "0.1"
 group = "lost.canvas"
 
-//避免 gradle compile 中文乱码
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
-
 apply from: "gradle/asciidoc.gradle"
 repositories {
     mavenLocal()
@@ -66,9 +62,15 @@ java {
     targetCompatibility = JavaVersion.toVersion("$javaVersion")
 }
 
-//swagger-view
+
+//避免 gradle compile 中文乱码
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
 tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
     options.fork = true
+    //swagger-view
     options.forkOptions.jvmArgs << '-Dmicronaut.openapi.views.spec=rapidoc.enabled=true,swagger-ui.enabled=true,swagger-ui.theme=flattop'
 }
 

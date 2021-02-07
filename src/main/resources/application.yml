@@ -8,6 +8,9 @@ micronaut:
     netty:
       access-logger:
         enabled: true
+    locale-resolution:
+      default-locale: zh_CN
+
   router:
     static-resources:
       swagger:

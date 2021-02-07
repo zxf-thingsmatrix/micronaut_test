@@ -9,11 +9,8 @@ public enum ResultCode {
 
     ok(0, "ok"),
     fail(4000, "fail"),
-    validate_fail(4444, "validate fail: {0}");
+    validate_fail(4444, "validate fail: {0}"),
+    unknown_exception(9999, "unknown exception");
     private final Integer code;
     private final String defaultMessage;
-
-    public String getMessageKey() {
-        return "result.code." + code;
-    }
 }
