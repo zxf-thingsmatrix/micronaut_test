@@ -19,6 +19,7 @@ import java.util.Objects;
 
 /**
  * 对 Result 进行本地化处理
+ * TODO 不应在此处拦截,影响性能
  */
 @Slf4j
 @Filter(value = Filter.MATCH_ALL_PATTERN)
@@ -36,6 +37,7 @@ public class ResultLocalizedFilter implements HttpServerFilter {
                     if (log.isDebugEnabled()) {
                         log.debug("[ResultLocalizedFilter] doFilter,before response.status={} response.body={}", mutableHttpResponse.getStatus(), mutableHttpResponse.getBody());
                     }
+                    //对返回 Result 类型进行本地化处理,非 Result 类型跳过
                     mutableHttpResponse.getBody(Result.class).ifPresent(result -> {
                         Result localizedResult = localizeResult(request, result);
                         mutableHttpResponse.body(localizedResult);

@@ -1,6 +1,5 @@
 package lost.canvas.micronaut_test.controller;
 
-import io.micronaut.context.MessageSource;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
@@ -9,8 +8,8 @@ import io.micronaut.validation.Validated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import lost.canvas.micronaut_test.common.entity.Result;
 
-import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -19,30 +18,14 @@ import javax.validation.constraints.NotBlank;
 @Controller
 public class PingController {
 
-    @Inject
-    private MessageSource messageSource;
-
-
-    @Get(value = "/ping/plain")
-    @Produces(value = MediaType.TEXT_PLAIN)
-    public String pingPlain() {
-        return "PONG !!!";
-    }
-
-    @Get(value = "/ping/json")
-    @Produces(value = MediaType.APPLICATION_JSON)
-    public Pong pingJson(HttpRequest req) {
-        return new Pong(req.getRemoteAddress().getHostString(), "PONG !!!");
-    }
-
     @Post(value = "/ping/body")
     @Produces(value = MediaType.APPLICATION_JSON)
     @Consumes(value = MediaType.APPLICATION_JSON)
-    public Pong pingJson2(HttpRequest req,
-                          @Valid @Body Ping ping) {
-        int v = 1 / 0;
-//        log.info("[{}] ping greet: {}", req.getRemoteAddress().getHostString(), ping.getGreet());
-        return new Pong(req.getRemoteAddress().getHostString(), ping.getGreet());
+    public Result<Pong> pingJson2(HttpRequest req,
+                                  @Valid @Body Ping ping) {
+//        int v = 1 / 0;
+        Pong pong = new Pong(req.getRemoteAddress().getHostString(), ping.getGreet());
+        return Result.ok(pong);
     }
 
     @Data

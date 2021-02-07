@@ -48,4 +48,23 @@ public final class EmptyUtil {
     public boolean nonEmpty(CharSequence charSequence) {
         return !isEmpty(charSequence);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    //  if-empty-default
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public <T> T[] emptyDefault(T[] objs, T... defaultValue) {
+        return isEmpty(objs) ? defaultValue : objs;
+    }
+
+    public <T> Collection<T> emptyDefault(Collection<T> collection, Collection<T> defaultValue) {
+        return isEmpty(collection) ? defaultValue : collection;
+    }
+
+    public <K, V> Map<K, V> emptyDefault(Map<K, V> map, Map<K, V> defaultValue) {
+        return isEmpty(map) ? defaultValue : map;
+    }
+
+    public CharSequence emptyDefault(CharSequence charSequence, CharSequence defaultValue) {
+        return isEmpty(charSequence) ? defaultValue : charSequence;
+    }
 }
