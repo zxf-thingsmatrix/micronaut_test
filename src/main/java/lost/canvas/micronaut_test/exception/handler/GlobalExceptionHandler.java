@@ -11,6 +11,7 @@ import lost.canvas.micronaut_test.common.entity.Result;
 import lost.canvas.micronaut_test.common.entity.ResultCode;
 import lost.canvas.micronaut_test.common.exception.ServiceException;
 import lost.canvas.micronaut_test.common.util.Utils;
+import lost.canvas.micronaut_test.interceptor.ResultAdvice;
 
 import javax.inject.Singleton;
 import javax.validation.ConstraintViolation;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 //替换 ConstraintExceptionHandler，使得 可以拦截ConstraintException
 @Replaces(io.micronaut.validation.exceptions.ConstraintExceptionHandler.class)
 @Produces(value = MediaType.APPLICATION_JSON)
+@ResultAdvice
 @Singleton
 public class GlobalExceptionHandler implements ExceptionHandler<Throwable, HttpResponse<Result<Void>>> {
 
@@ -33,14 +35,11 @@ public class GlobalExceptionHandler implements ExceptionHandler<Throwable, HttpR
     public HttpResponse<Result<Void>> handle(HttpRequest request, Throwable exception) {
 
         log.error("========================handle-global-exception========================", exception);
-
         //拦截 validation 相关异常
         if (exception instanceof ConstraintViolationException) {
             ConstraintViolationException ex = (ConstraintViolationException) exception;
-            Object[] messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate)
+            Object[] messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage)
                     .filter(Utils.empty::nonEmpty)
-                    .map(message -> message.replace("{", ""))
-                    .map(message -> message.replace("}", ""))
                     .collect(Collectors.toList()).toArray(new String[]{});
             Result<Void> result = Result.fail(ResultCode.validate_fail, Utils.message.convertVariables(messages));
             return HttpResponse.ok(result);

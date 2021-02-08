@@ -2,12 +2,10 @@ package lost.canvas.micronaut_test.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lost.canvas.micronaut_test.common.util.Utils;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 @Getter
 public class Result<T> {
@@ -62,14 +60,20 @@ public class Result<T> {
         return "result.code." + code;
     }
 
+//    public Result<T> localize(BiFunction<String[], Map<String, Object>, String> fn) {
+//        //消息变量本地化
+//        Map<String, Object> localizedVariables = Utils.empty.isEmpty(variables) ? null :
+//                variables.entrySet().stream()
+//                        .collect(Collectors.toMap(e -> e.getKey(), e -> fn.apply(new String[]{e.getValue().toString(), e.getValue().toString()}, null)));
+//        //消息模板本地化
+//        String localizeMessage = fn.apply(new String[]{this.getMessageKey(), this.getMessage()}, localizedVariables);
+//        return new Result<>(this.getCode(), localizeMessage, this.getData(), localizedVariables);
+//    }
+
     public Result<T> localize(BiFunction<String[], Map<String, Object>, String> fn) {
-        //消息变量本地化
-        Map<String, Object> localizedVariables = Utils.empty.isEmpty(variables) ? null :
-                variables.entrySet().stream()
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> fn.apply(new String[]{e.getValue().toString(), e.getValue().toString()}, null)));
         //消息模板本地化
-        String localizeMessage = fn.apply(new String[]{this.getMessageKey(), this.getMessage()}, localizedVariables);
-        return new Result<>(this.getCode(), localizeMessage, this.getData(), localizedVariables);
+        String localizeMessage = fn.apply(new String[]{this.getMessageKey(), this.getMessage()}, this.variables);
+        return new Result<>(this.getCode(), localizeMessage, this.getData(), null);
     }
 
 }

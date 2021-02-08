@@ -9,11 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import lost.canvas.micronaut_test.common.entity.Result;
+import lost.canvas.micronaut_test.interceptor.ResultAdvice;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Slf4j
+@ResultAdvice
 @Validated
 @Controller
 public class PingController {
@@ -40,5 +44,8 @@ public class PingController {
     public static class Ping {
         @NotBlank(message = "{greet.NotBlank}")
         private String greet;
+        @Max(value = 100,message = "{age.Max}")
+        @Min(value = 0,message = "{age.Min}")
+        private Integer age;
     }
 }
