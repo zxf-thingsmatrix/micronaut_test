@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import lost.canvas.micronaut_test.common.entity.Result;
-import lost.canvas.micronaut_test.interceptor.ResultAdvice;
+import lost.canvas.micronaut_test.interceptor.ResultLocalized;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -17,7 +17,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Slf4j
-@ResultAdvice
+@ResultLocalized
 @Validated
 @Controller
 public class PingController {

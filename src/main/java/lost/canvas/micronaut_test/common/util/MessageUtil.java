@@ -12,30 +12,39 @@ import java.util.regex.Pattern;
 @Slf4j
 public final class MessageUtil {
 
-    private final Pattern variable_pattern = Pattern.compile("\\{(.+)?\\}");
+    private final Pattern variable_pattern = Pattern.compile("\\{(.+)?}");
 
 
     MessageUtil() {
     }
 
 
-    public String formatMessage(String messageTemplate, Map<String, Object> variables) {
+    public String interpolate(String messageTemplate, Map<String, Object> variables) {
         if (Utils.empty.isEmpty(variables)) return messageTemplate;
 
         StringBuffer sb = new StringBuffer();
         Matcher matcher = variable_pattern.matcher(messageTemplate);
+
         while (matcher.find()) {
-            String group = matcher.group(1);
-            if (log.isDebugEnabled()) {
-                log.debug("RegEx[{}] parse message_template[{}] variable: {}", variables, messageTemplate, group);
-            }
-            Object value = variables.get(group);
+            String variable = matcher.group(1);
+            Object value = variables.get(variable);
             if (Objects.nonNull(value)) {
+
+                if (log.isDebugEnabled()) {
+                    log.debug("RegEx[{}] parse message_template[{}] -> variable[{}]=value[{}]", variable_pattern, messageTemplate, variable, value);
+                }
+
                 matcher.appendReplacement(sb, value.toString());
             }
         }
+
         matcher.appendTail(sb);
-        return sb.toString();
+        String result = sb.toString();
+
+        if (log.isDebugEnabled()) {
+            log.debug("MessageUtil.interpolate(messageTemplate:{},variables:{}) -> {}", messageTemplate, variables, result);
+        }
+        return result;
     }
 
     public Map<String, Object> convertVariables(Object... variables) {

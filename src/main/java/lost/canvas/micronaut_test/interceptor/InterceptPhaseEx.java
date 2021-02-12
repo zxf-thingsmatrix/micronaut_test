@@ -7,7 +7,7 @@ public enum InterceptPhaseEx {
     /**
      * ResultInterceptor
      */
-    result(InterceptPhase.VALIDATE.getPosition() - 20);
+    result_localized(InterceptPhase.VALIDATE.getPosition() - 20);
 
     private final int position;
 

@@ -14,6 +14,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Around
-@Type(ResultInterceptor.class)
-public @interface ResultAdvice {
+@Type(ResultLocalizedInterceptor.class)
+public @interface ResultLocalized {
 }

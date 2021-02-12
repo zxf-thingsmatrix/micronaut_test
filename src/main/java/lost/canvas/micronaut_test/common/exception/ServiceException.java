@@ -18,7 +18,7 @@ public class ServiceException extends RuntimeException {
                             Throwable cause,
                             boolean enableSuppression,
                             boolean writableStackTrace) {
-        super(Utils.message.formatMessage(resultCode.getDefaultMessage(), variables), cause, enableSuppression, writableStackTrace);
+        super(Utils.message.interpolate(resultCode.getDefaultMessage(), variables), cause, enableSuppression, writableStackTrace);
         this.resultCode = resultCode;
         this.variables = variables;
     }

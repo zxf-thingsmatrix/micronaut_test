@@ -11,7 +11,7 @@ import lost.canvas.micronaut_test.common.entity.Result;
 import lost.canvas.micronaut_test.common.entity.ResultCode;
 import lost.canvas.micronaut_test.common.exception.ServiceException;
 import lost.canvas.micronaut_test.common.util.Utils;
-import lost.canvas.micronaut_test.interceptor.ResultAdvice;
+import lost.canvas.micronaut_test.interceptor.ResultLocalized;
 
 import javax.inject.Singleton;
 import javax.validation.ConstraintViolation;
@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 //替换 ConstraintExceptionHandler，使得 可以拦截ConstraintException
 @Replaces(io.micronaut.validation.exceptions.ConstraintExceptionHandler.class)
 @Produces(value = MediaType.APPLICATION_JSON)
-@ResultAdvice
 @Singleton
 public class GlobalExceptionHandler implements ExceptionHandler<Throwable, HttpResponse<Result<Void>>> {
 
+    @ResultLocalized
     @Override
     public HttpResponse<Result<Void>> handle(HttpRequest request, Throwable exception) {
 

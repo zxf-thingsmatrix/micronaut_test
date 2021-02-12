@@ -1,4 +1,4 @@
-package lost.canvas
+package lost.canvas.micronaut_test
 
 
 import io.micronaut.runtime.EmbeddedApplication

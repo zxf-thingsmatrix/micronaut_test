@@ -5,4 +5,6 @@ public interface Utils {
     MessageUtil message = new MessageUtil();
     ExceptionUtil exception = new ExceptionUtil();
     EmptyUtil empty = new EmptyUtil();
+    StringUtil string = new StringUtil();
+
 }
