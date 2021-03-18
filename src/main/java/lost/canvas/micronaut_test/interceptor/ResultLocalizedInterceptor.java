@@ -6,7 +6,7 @@ import io.micronaut.context.MessageSource;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import lost.canvas.micronaut_test.common.entity.Result;
+import lost.canvas.micronaut_test.common.data.value_object.Result;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

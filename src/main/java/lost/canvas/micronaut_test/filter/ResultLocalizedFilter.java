@@ -9,7 +9,7 @@
 //import io.micronaut.http.server.util.locale.RequestLocaleResolver;
 //import io.reactivex.Flowable;
 //import lombok.extern.slf4j.Slf4j;
-//import lost.canvas.micronaut_test.common.entity.Result;
+//import lost.canvas.micronaut_test.common.vo.Result;
 //import org.reactivestreams.Publisher;
 //
 //import javax.inject.Inject;

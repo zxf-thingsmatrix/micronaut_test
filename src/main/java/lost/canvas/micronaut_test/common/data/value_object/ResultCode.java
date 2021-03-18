@@ -1,4 +1,4 @@
-package lost.canvas.micronaut_test.common.entity;
+package lost.canvas.micronaut_test.common.data.value_object;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

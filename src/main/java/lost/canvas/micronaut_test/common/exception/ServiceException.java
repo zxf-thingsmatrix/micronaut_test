@@ -1,7 +1,7 @@
 package lost.canvas.micronaut_test.common.exception;
 
 import lombok.Getter;
-import lost.canvas.micronaut_test.common.entity.ResultCode;
+import lost.canvas.micronaut_test.common.data.value_object.ResultCode;
 import lost.canvas.micronaut_test.common.util.Utils;
 
 import java.util.Map;
