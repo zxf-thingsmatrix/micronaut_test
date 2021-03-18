@@ -6,5 +6,5 @@ public interface Utils {
     ExceptionUtil exception = new ExceptionUtil();
     EmptyUtil empty = new EmptyUtil();
     StringUtil string = new StringUtil();
-
+    StreamUtil stream = new StreamUtil();
 }
